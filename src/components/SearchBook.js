@@ -37,7 +37,7 @@ class SearchBook extends Component{
           </div>
         </div>
         <div className="search-books-results">
-          <ListBooks shelf="none" books={this.state.booksResult}/>
+          <ListBooks books={this.state.booksResult}/>
         </div>
       </div>
     )
