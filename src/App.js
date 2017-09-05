@@ -8,9 +8,8 @@ class BooksApp extends Component {
     super(props);
 
     this.state = {
-      currentlyReading: [],
-      wantToRead: [],
-      read: [],
+      books: [],
+
       /**
        * TODO: Instead of using this state variable to keep track of which page
        * we're on, use the URL in the browser's address bar. This will ensure that
@@ -21,22 +20,28 @@ class BooksApp extends Component {
     }
 
     this.changeScreen = this.changeScreen.bind(this);
+    this.updateBookShelf = this.updateBookShelf.bind(this);
   }
 
-  filterBooksByShelf = function(filter, list){
-    return list.filter((book) => book.shelf === filter);
+  updateBookShelf = function(updateBook, shelf){
+    const {books} = this.state;
+    for (let book of books){
+      if(updateBook.id === book.id){
+        updateBook.shelf = shelf;
+        break;
+      }
+    }
+    this.setState({books});
+    BooksAPI.update(updateBook, shelf);
   }
 
-  filterBooks = function(books){
-    const currentlyReading = this.filterBooksByShelf('currentlyReading', books);
-    const wantToRead = this.filterBooksByShelf('wantToRead', books);
-    const read = this.filterBooksByShelf('read', books);
-
-    this.setState({currentlyReading, wantToRead, read});
+  filterBooksByShelf = function(filter){
+    return this.state.books.filter((book) => book.shelf === filter);
   }
+
 
   componentDidMount = function(){
-    BooksAPI.getAll().then((books) => this.filterBooks(books));
+    BooksAPI.getAll().then((books) => this.setState({books}));
   }
 
   changeScreen = function() {
@@ -44,10 +49,14 @@ class BooksApp extends Component {
   }
 
   render() {
+    const currentlyReading = this.filterBooksByShelf('currentlyReading');
+    const wantToRead = this.filterBooksByShelf('wantToRead');
+    const read = this.filterBooksByShelf('read');
+
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <SearchBook onChangeScreen={this.changeScreen}/>
+          <SearchBook onChangeScreen={this.changeScreen} booksShelved={this.state.books}/>
         ) : (
           <div className="list-books">
             <div className="list-books-title">
@@ -58,19 +67,19 @@ class BooksApp extends Component {
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Currently Reading</h2>
                   <div className="bookshelf-books">
-                    <ListBooks books={this.state.currentlyReading}/>
+                    <ListBooks books={currentlyReading} onUpdateBookShelf={this.updateBookShelf}/>
                   </div>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Want to Read</h2>
                   <div className="bookshelf-books">
-                    <ListBooks books={this.state.wantToRead}/>
+                    <ListBooks books={wantToRead} onUpdateBookShelf={this.updateBookShelf}/>
                   </div>
                 </div>
                 <div className="bookshelf">
                   <h2 className="bookshelf-title">Read</h2>
                   <div className="bookshelf-books">
-                    <ListBooks books={this.state.read}/>
+                    <ListBooks books={read} onUpdateBookShelf={this.updateBookShelf}/>
                   </div>
                 </div>
               </div>

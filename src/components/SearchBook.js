@@ -1,20 +1,50 @@
 import React, {Component} from 'react';
 import * as BooksAPI from '../BooksAPI';
-import ListBooks from './ListBooks'
+import ListBooks from './ListBooks';
+
 class SearchBook extends Component{
   constructor(props){
     super(props);
     this.state = {
       booksResult: []
     }
+    this.updateBookShelf = this.updateBookShelf.bind(this);
   }
 
   searchBook = function(query){
     // TODO colocar delay para realizar busca
     // TODO verificar criteria
     if(!!query){
-      BooksAPI.search(query, 10).then((booksResult) => this.setState({booksResult}));
+      BooksAPI.search(query, 10).then((booksResult) => {
+
+
+        this.loadBooksShelves(booksResult);
+        this.setState({booksResult});
+      });
+
     }
+  }
+
+  loadBooksShelves(booksResult){
+    const {booksShelved} = this.props;
+    booksResult.map((book) => {
+      const bookShelved = booksShelved.find((element) => element.id === book.id);
+      if(bookShelved){
+        book.shelf = bookShelved.shelf;
+      }
+    });
+  }
+
+  updateBookShelf = function(updateBook, shelf){
+    const {booksResult} = this.state;
+    for (let book of booksResult){
+      if(updateBook.id === book.id){
+        updateBook.shelf = shelf;
+        break;
+      }
+    }
+    this.setState({booksResult});
+    BooksAPI.update(updateBook, shelf);
   }
 
   render(){
@@ -37,7 +67,7 @@ class SearchBook extends Component{
           </div>
         </div>
         <div className="search-books-results">
-          <ListBooks books={this.state.booksResult}/>
+          <ListBooks books={this.state.booksResult} onUpdateBookShelf={this.updateBookShelf}/>
         </div>
       </div>
     )
