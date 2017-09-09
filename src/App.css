@@ -154,11 +154,78 @@ body, .app {
   background-size: 20px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
+
 .book-shelf-changer select {
   width: 100%;
   height: 100%;
   opacity: 0;
   cursor: pointer;
+}
+
+/*shelf selector*/
+.book-shelf-select{
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 100;
+}
+
+
+.book-shelf-select .Select-menu-outer {
+  background-color: #60ac5d;
+  min-width: 160px;
+  border-radius: 5px;
+  box-shadow: 0 6px 6px rgba(0,0,0,0.16), 3px 6px 6px rgba(0,0,0,0.23);
+}
+
+.book-shelf-select .Select-menu-outer .Select-menu div:hover{
+  background-color: #599156;
+}
+
+.book-shelf-select .is-disabled{
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  background-color: #2e7c31 !important;
+  cursor: default !important;
+  border-bottom-left-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+  font-size: 15px;
+  font-weight: bold;
+  color: #161A16 !important;
+  background-image: url('./icons/book-transparent.png');
+  background-repeat: no-repeat;
+  background-size: 25px 25px;
+  background-position: 10%;
+  text-align: center;
+}
+
+.book-shelf-select .is-selected{
+  background-color: #599156;
+}
+
+.book-shelf-select .Select-option{
+  color: white;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  border-radius: 5px;
+  border: 1px green;
+  border-style: none none dotted;
+
+}
+
+.book-shelf-select .Select-clear-zone,
+.book-shelf-select .Select-value-label{
+  display: none;
+}
+
+.book-shelf-select .Select-control{
+  width: 100%;
+  height: 100%;
 }
 
 /* book cover */

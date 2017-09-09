@@ -9,17 +9,24 @@ class SearchBook extends Component{
     this.state = {
       booksResult: []
     }
+    this.timeout = null;
   }
 
   searchBook = query => {
-    // TODO colocar delay para realizar busca
-    // TODO verificar criteria
-    if(!!query){
-      BooksAPI.search(query, 10).then((booksResult) => {
-        this.loadBooksShelves(booksResult);
-        this.setState({booksResult});
-      });
-    }
+    // Clear timeout if the user still typing
+    clearTimeout(this.timeout);
+
+    // Wait for user stop typing
+    this.timeout = setTimeout(() => {
+      if(!!query){
+        BooksAPI.search(query, 10).then((booksResult) => {
+          this.loadBooksShelves(booksResult);
+          this.setState({booksResult});
+        });
+      }else{
+        this.setState({booksResult: []});
+      }
+    }, 500);
   }
 
   loadBooksShelves = booksResult => {
@@ -37,6 +44,7 @@ class SearchBook extends Component{
 
   render(){
     const {onUpdateBookShelf} = this.props;
+    this.loadBooksShelves(this.state.booksResult);
     return(
       <div className="search-books">
         <div className="search-books-bar">

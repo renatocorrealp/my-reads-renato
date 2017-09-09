@@ -1,11 +1,35 @@
 import React from 'react';
+import Select from 'react-select';
 
 function ListBooks(props){
-    const {books} = props;
+    let {books} = props;
     const {onUpdateBookShelf} = props;
+
+    const selectOptions = [{label: 'Move to...', value:'moveto', disabled: true},
+      {label:'Currently Reading',value: 'currentlyReading'},
+      {label:'Want to Read',value: 'wantToRead'},
+      {label:'Read',value: 'read'},
+      {label:'None',value: 'none'}];
+
+    // Normalize books attributes
+    if(!!books && books.length > 0){
+      for (const element of books){
+        // Normalize thumbnails
+        if(!element.imageLinks || !element.imageLinks.thumbnail){
+          element.imageLinks = {thumbnail: ''};
+        }
+
+        // Normalize authors
+        if(!element.authors){
+          element.authors = [];
+        }
+      }
+    }else{
+      books = [];
+    }
+
     return(
       <div>
-        {(!!books && books.length > 0) && (
           <ol className="books-grid">
               {books.map((book) => (
                 <li key={book.id}>
@@ -13,24 +37,19 @@ function ListBooks(props){
                     <div className="book-top">
                       <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                       <div className="book-shelf-changer">
-                        <select defaultValue={(!!book.shelf ? book.shelf : 'none')} onChange={(event) => onUpdateBookShelf(book, event.target.value)}>
-                          <option value="moveto" disabled>Move to...</option>
-                          <option value="currentlyReading">Currently Reading</option>
-                          <option value="wantToRead" >Want to Read</option>
-                          <option value="read">Read</option>
-                          <option value="none">None</option>
-                        </select>
+                        <Select options={selectOptions} onChange={(event) => onUpdateBookShelf(book, event.value)}
+                          className="book-shelf-select" searchable={false} placeholder={false}
+                          value={book.shelf ? book.shelf : 'none'}/>
                       </div>
                     </div>
                     <div className="book-title">{book.title}</div>
                         <div className="book-authors">
-                        	{book.authors? book.authors.join(', ') : ''}
+                        	{book.authors.join(', ')}
                         </div>
                   </div>
                 </li>
               ))}
           </ol>
-        )}
       </div>
     )
 }
