@@ -2,51 +2,41 @@ import React, {Component} from 'react';
 import * as BooksAPI from './BooksAPI'
 import './App.css';
 import SearchBook from './components/SearchBook';
-import ListBooks from './components/ListBooks'
+import ListBooks from './components/ListBooks';
+import {Link} from 'react-router-dom';
+import {Route}from 'react-router-dom';
 class BooksApp extends Component {
   constructor(props){
     super(props);
 
     this.state = {
-      books: [],
-
-      /**
-       * TODO: Instead of using this state variable to keep track of which page
-       * we're on, use the URL in the browser's address bar. This will ensure that
-       * users can use the browser's back and forward buttons to navigate between
-       * pages, as well as provide a good URL they can bookmark and share.
-       */
-      showSearchPage: true
+      books: []
     }
-
-    this.changeScreen = this.changeScreen.bind(this);
     this.updateBookShelf = this.updateBookShelf.bind(this);
   }
 
-  updateBookShelf = function(updateBook, shelf){
-    const {books} = this.state;
-    for (let book of books){
-      if(updateBook.id === book.id){
+  updateBookShelf = (updateBook, shelf) => {
+    this.setState(prev => {
+      const {books} = prev;
+      let bookShelved = books.find((element) => element.id === updateBook.id);
+
+      if(bookShelved){
+        bookShelved.shelf = shelf;
+      }else{
         updateBook.shelf = shelf;
-        break;
+        books.push(updateBook);
       }
-    }
-    this.setState({books});
+    });
     BooksAPI.update(updateBook, shelf);
   }
 
-  filterBooksByShelf = function(filter){
+  /*filterBooksByShelf = function(filter){
     return this.state.books.filter((book) => book.shelf === filter);
-  }
+  }*/
 
+  filterBooksByShelf = filter => this.state.books.filter((book) => book.shelf === filter);
 
-  componentDidMount = function(){
-    BooksAPI.getAll().then((books) => this.setState({books}));
-  }
-
-  changeScreen = function() {
-    this.setState((state) => ({showSearchPage: !this.state.showSearchPage}));
-  }
+  componentDidMount = () => BooksAPI.getAll().then((books) => this.setState({books}));
 
   render() {
     const currentlyReading = this.filterBooksByShelf('currentlyReading');
@@ -55,9 +45,10 @@ class BooksApp extends Component {
 
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <SearchBook onChangeScreen={this.changeScreen} booksShelved={this.state.books}/>
-        ) : (
+        <Route path="/search" render={() => (
+          <SearchBook booksShelved={this.state.books} onUpdateBookShelf={this.updateBookShelf}/>
+        )} />
+        <Route exact path="/" render={() => (
           <div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
@@ -85,10 +76,10 @@ class BooksApp extends Component {
               </div>
             </div>
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <Link to="/search">Add a book</Link>
             </div>
           </div>
-        )}
+        )}/>
       </div>
     )
   }

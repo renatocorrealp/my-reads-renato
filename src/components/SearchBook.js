@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as BooksAPI from '../BooksAPI';
 import ListBooks from './ListBooks';
+import {Link} from 'react-router-dom';
 
 class SearchBook extends Component{
   constructor(props){
@@ -8,51 +9,38 @@ class SearchBook extends Component{
     this.state = {
       booksResult: []
     }
-    this.updateBookShelf = this.updateBookShelf.bind(this);
   }
 
-  searchBook = function(query){
+  searchBook = query => {
     // TODO colocar delay para realizar busca
     // TODO verificar criteria
     if(!!query){
       BooksAPI.search(query, 10).then((booksResult) => {
-
-
         this.loadBooksShelves(booksResult);
         this.setState({booksResult});
       });
-
     }
   }
 
-  loadBooksShelves(booksResult){
+  loadBooksShelves = booksResult => {
     const {booksShelved} = this.props;
-    booksResult.map((book) => {
-      const bookShelved = booksShelved.find((element) => element.id === book.id);
-      if(bookShelved){
-        book.shelf = bookShelved.shelf;
-      }
-    });
-  }
 
-  updateBookShelf = function(updateBook, shelf){
-    const {booksResult} = this.state;
-    for (let book of booksResult){
-      if(updateBook.id === book.id){
-        updateBook.shelf = shelf;
-        break;
-      }
+    if(!!booksResult && booksResult.length > 0){
+       for(const book of booksResult) {
+        const bookShelved = booksShelved.find((element) => element.id === book.id);
+        if(bookShelved){
+          book.shelf = bookShelved.shelf;
+        }
+      };
     }
-    this.setState({booksResult});
-    BooksAPI.update(updateBook, shelf);
   }
 
   render(){
-    const {onChangeScreen} = this.props;
+    const {onUpdateBookShelf} = this.props;
     return(
       <div className="search-books">
         <div className="search-books-bar">
-          <a className="close-search" onClick={onChangeScreen}>Close</a>
+          <Link className="close-search" to="/">Close</Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -67,7 +55,7 @@ class SearchBook extends Component{
           </div>
         </div>
         <div className="search-books-results">
-          <ListBooks books={this.state.booksResult} onUpdateBookShelf={this.updateBookShelf}/>
+          <ListBooks books={this.state.booksResult} onUpdateBookShelf={onUpdateBookShelf}/>
         </div>
       </div>
     )

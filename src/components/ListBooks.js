@@ -1,9 +1,8 @@
-import React, {Component} from 'react';
-class ListBooks extends Component{
+import React from 'react';
 
-  render(){
-    const {books} = this.props;
-    const {onUpdateBookShelf} = this.props;
+function ListBooks(props){
+    const {books} = props;
+    const {onUpdateBookShelf} = props;
     return(
       <div>
         {(!!books && books.length > 0) && (
@@ -34,6 +33,5 @@ class ListBooks extends Component{
         )}
       </div>
     )
-  }
 }
 export default ListBooks;
