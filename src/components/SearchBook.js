@@ -46,7 +46,7 @@ class SearchBook extends Component{
     const {onUpdateBookShelf} = this.props;
     this.loadBooksShelves(this.state.booksResult);
     return(
-      <div className="search-books">
+      <div className="search-books" id="searchBookComponent">
         <div className="search-books-bar">
           <Link className="close-search" to="/">Close</Link>
           <div className="search-books-input-wrapper">

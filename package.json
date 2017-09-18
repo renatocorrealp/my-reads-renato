@@ -12,7 +12,13 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --setupTestFrameworkScriptFile ./setupTest.js",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "enzyme": "^2.9.1",
+    "react-mock-router": "^1.0.11",
+    "react-router-test-context": "^0.1.0",
+    "react-test-renderer": "^15.6.1"
   }
 }
