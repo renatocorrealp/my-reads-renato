@@ -17,12 +17,14 @@ O projeto possui três funcionalidades básicas:
 
 **Pré-requisitos**
 
-- [Npm e NodeJs](https://nodejs.org/en/).
-- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+- [Npm e NodeJs](https://nodejs.org/en/)
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 **Instalação**
 
- 1. Faça o download ou clone o repositório em uma pasta local.
+ 1. Faça o clone do projeto uma pasta local:
+
+		git clone https://github.com/renatocorrealp/my-reads-renato.git
  2. Na pasta do projeto, execute:
 
 	    npm install
@@ -31,4 +33,4 @@ O projeto possui três funcionalidades básicas:
 
 1. Na pasta do projeto, execute o comando:
 
-			npm start
+	    npm start
