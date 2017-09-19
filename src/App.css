@@ -172,7 +172,6 @@ body, .app {
   z-index: 100;
 }
 
-
 .book-shelf-select .Select-menu-outer {
   background-color: #60ac5d;
   min-width: 160px;
@@ -185,19 +184,16 @@ body, .app {
 }
 
 .book-shelf-select .is-disabled{
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
+  padding: 10px 0 10px !important;
   background-color: #2e7c31 !important;
   cursor: default !important;
   border-bottom-left-radius: 0px !important;
   border-bottom-right-radius: 0px !important;
-  font-size: 15px;
+  font: 15px bold;
   font-weight: bold;
-  color: #161A16 !important;
-  background-image: url('./icons/book-transparent.png');
-  background-repeat: no-repeat;
+  color: #161a16 !important;
+  background: url('./icons/book-transparent.png') no-repeat 10%;
   background-size: 25px 25px;
-  background-position: 10%;
   text-align: center;
 }
 
@@ -208,14 +204,10 @@ body, .app {
 .book-shelf-select .Select-option{
   color: white;
   width: 100%;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 5px;
-  padding-top: 5px;
+  padding: 5px 10px 5px;
   border-radius: 5px;
   border: 1px green;
   border-style: none none dotted;
-
 }
 
 .book-shelf-select .Select-clear-zone,
